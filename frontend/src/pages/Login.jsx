@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Loader from '../components/Loader';
 
 const Login = () => {
-  const { backendUrl, token, setToken } = useContext(AppContext);
+  const { backendUrl, token, setToken, loading, setLoading } = useContext(AppContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const { data } = await axios.post(`${backendUrl}/api/user/login`, { email, password });
 
@@ -26,6 +27,8 @@ const Login = () => {
     } catch (err) {
       toast.error(err.message)
       console.error(err);
+    } finally{
+      setLoading(false);
     }
 
   }
@@ -45,7 +48,13 @@ const Login = () => {
           <input className='border border-zinc-300 rounded w-full p-2 mt-1' type="password" onChange={(e) => setPassword(e.target.value)} value={password} required />
         </div>
 
-        <button type='submit' className='bg-primary text-white w-full py-2 rounded-md text-base'>Login</button>
+        <button
+          type='submit'
+          className={`flex text-center justify-center bg-primary text-white w-full py-2 rounded-md text-base ${loading ? 'cursor-not-allowed py-4' : 'cursor-pointer'}`}
+          disabled={loading} // Disable the button when loading is true
+        >
+          {loading ? <Loader /> : "Login"}
+        </button>
         <p>Create an new account? <span className='text-primary underline cursor-pointer' onClick={() => navigate('/signup')}> click here</span></p>
       </div>
     </form>

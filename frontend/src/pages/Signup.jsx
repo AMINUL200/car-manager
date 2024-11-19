@@ -57,7 +57,7 @@ const Signup = () => {
           <input className='border border-zinc-300 rounded w-full p-2 mt-1' type="password" onChange={(e) => setPassword(e.target.value)} value={password} required />
         </div>
 
-        <button type='submit' className='flex text-center justify-center bg-primary text-white w-full py-2 rounded-md text-base'>
+        <button type='submit'  className={`flex text-center justify-center bg-primary text-white w-full py-2 rounded-md text-base ${loading ? 'cursor-not-allowed py-4' : 'cursor-pointer'}`}>
           {loading ? <Loader/> : " Create Account"}
         </button>
         <p>Already have an account?<span className='text-primary underline cursor-pointer' onClick={() => navigate('/login')}> click here</span></p>
